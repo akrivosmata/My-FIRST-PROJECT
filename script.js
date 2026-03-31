@@ -84,24 +84,91 @@ window.addEventListener('scroll', () => {
 // Form Submission handling
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
+  const form = e.target;
   const btn = document.getElementById('submitBtn');
   const span = btn.querySelector('span');
+  const originalText = span.textContent;
   
+  // Update button state
   span.textContent = 'Sending...';
-  
-  setTimeout(() => {
+  btn.style.opacity = '0.7';
+  btn.style.pointerEvents = 'none';
+
+  // Get form values
+  const name = document.getElementById('contactName').value;
+  const email = document.getElementById('contactEmail').value;
+  const subject = document.getElementById('contactSubject').value;
+  const message = document.getElementById('contactMessage').value;
+
+  // Create form data to match the exact Google Form entry IDs
+  const formData = new FormData();
+  formData.append('entry.1627223111', name);
+  formData.append('entry.1049218461', email);
+  formData.append('entry.1049144900', subject);
+  formData.append('entry.1047557160', message);
+
+  // Submit via fetch
+  fetch('https://docs.google.com/forms/d/e/1FAIpQLScKCTXDhJoPLlDkmeogQjX3VzhLb7dJDgg0NTMpuh85KxIWzw/formResponse', {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' // Required to prevent CORS errors on form submission
+  }).then(() => {
+    // Show success state
     btn.style.background = '#4caf82';
     btn.style.color = '#fff';
+    btn.style.borderColor = '#4caf82';
     span.textContent = 'Message Sent';
-    e.target.reset();
+    form.reset();
+    
+    // Show Confirmation Popup
+    const popup = document.getElementById('confirmationPopup');
+    if (popup) {
+      popup.classList.add('active');
+    }
+    
+    // Reset button after 4 seconds
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.borderColor = '';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      span.textContent = originalText;
+    }, 4000);
+  }).catch((error) => {
+    console.error('Submission Failed', error);
+    span.textContent = 'Error. Try Again.';
+    btn.style.background = '#e74c3c';
+    btn.style.color = '#fff';
+    btn.style.borderColor = '#e74c3c';
     
     setTimeout(() => {
       btn.style.background = '';
       btn.style.color = '';
-      span.textContent = 'Send Message';
+      btn.style.borderColor = '';
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+      span.textContent = originalText;
     }, 4000);
-  }, 1500);
+  });
 });
+
+// Popup Close Logic
+const closePopupBtn = document.getElementById('closePopupBtn');
+const popupOverlay = document.getElementById('confirmationPopup');
+
+if (closePopupBtn && popupOverlay) {
+  closePopupBtn.addEventListener('click', () => {
+    popupOverlay.classList.remove('active');
+  });
+
+  // Also close on clicking outside the modal
+  popupOverlay.addEventListener('click', (e) => {
+    if (e.target === popupOverlay) {
+      popupOverlay.classList.remove('active');
+    }
+  });
+}
 
 // --- MAIN GSAP ANIMATIONS ---
 function initAnimations() {

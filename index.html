@@ -373,20 +373,20 @@
           <div class="form-row">
             <div class="input-wrap">
               <label>Full Name</label>
-              <input type="text" placeholder="Your name" required>
+              <input type="text" id="contactName" placeholder="Your name" required>
             </div>
             <div class="input-wrap">
               <label>Email Address</label>
-              <input type="email" placeholder="your@email.com" required>
+              <input type="email" id="contactEmail" placeholder="your@email.com" required>
             </div>
           </div>
           <div class="input-wrap">
             <label>Subject</label>
-            <input type="text" placeholder="How can I help you?">
+            <input type="text" id="contactSubject" placeholder="How can I help you?">
           </div>
           <div class="input-wrap">
             <label>Message</label>
-            <textarea placeholder="Share the context of your inquiry..." required></textarea>
+            <textarea id="contactMessage" placeholder="Share the context of your inquiry..." required></textarea>
           </div>
           <button type="submit" class="btn-primary" id="submitBtn">
             <span>Send Message</span><i data-lucide="send"></i>
@@ -401,6 +401,18 @@
     <div class="f-center">© 2026 · All Rights Reserved</div>
     <div class="f-right">Kerala, India</div>
   </footer>
+
+  <!-- Confirmation Popup -->
+  <div class="popup-overlay" id="confirmationPopup">
+    <div class="popup-modal">
+      <i data-lucide="check-circle" class="popup-icon"></i>
+      <h3 class="popup-title">Message Received.</h3>
+      <p class="popup-desc">Your inquiry has been submitted. I will review your message and reach out if there is a mutual fit for collaboration.</p>
+      <button class="popup-btn" id="closePopupBtn">
+        <span>Close</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/lucide@latest"></script>
